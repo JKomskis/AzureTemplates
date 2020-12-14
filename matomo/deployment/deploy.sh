@@ -120,6 +120,9 @@ identity_output=$(az vm identity assign \
     --name matomo-vm \
     --resource-group matomo-rg)
 system_assigned_identity=$(echo $identity_output | jq --raw-output '.systemAssignedIdentity')
+az role assignment create --assignee $system_assigned_identity \
+    --role "Reader" \
+    --resource-group matomo-rg
 
 echo $system_assigned_identity
 

@@ -7,6 +7,7 @@ packages:
   - curl
   - gnupg-agent
   - software-properties-common
+  - jq
 
 disk_setup:
   /dev/disk/azure/scsi1/lun0:
@@ -20,7 +21,7 @@ fs_setup:
     filesystem: ext4
 
 mounts:
-    - ["/dev/disk/azure/scsi1/lun0-part1", "/data", auto, "defaults,noexec,nofail"]
+    - ["/dev/disk/azure/scsi1/lun0-part1", "/data", auto, "defaults,nofail"]
 
 # create the docker group
 groups:
@@ -40,15 +41,17 @@ runcmd:
   - sudo chmod +x /usr/local/bin/docker-compose
   # Install Azure CLI
   - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+  - az login --identity
   # Clone git repo
   - cd /data
-  - git clone https://github.com/JKomskis/AzureTemplates.git
-  - git checkout matomo
-  # Run containers
   - su azureuser
+  - git clone https://github.com/JKomskis/AzureTemplates.git
+  - cd AzureTemplates
+  - ./matomo/create_env_file.sh
+  # Run containers
   - docker network create frontend
-  # - cd /AzureTemplates/matomo
-  # - docker-compose up -d
-  # - cd ../traefik
-  # - docker compose up -d
+  - cd matomo
+  - docker-compose up -d
+  - cd ../traefik
+  - docker compose up -d
 
