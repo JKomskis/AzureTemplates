@@ -126,7 +126,7 @@ az role assignment create --assignee $system_assigned_identity \
 
 echo $system_assigned_identity
 
-# Asssign permissions to identity
+# Assign permissions to identity
 az keyvault set-policy \
     --name jkomskis-matomo-kv \
     --object-id $system_assigned_identity \

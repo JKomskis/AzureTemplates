@@ -47,11 +47,12 @@ runcmd:
   - su azureuser
   - git clone https://github.com/JKomskis/AzureTemplates.git
   - cd AzureTemplates
+  - chmod u+x ./matomo/create_env_file.sh
   - ./matomo/create_env_file.sh
   # Run containers
   - docker network create frontend
   - cd matomo
   - docker-compose up -d
   - cd ../traefik
-  - docker compose up -d
+  - docker-compose up -d
 
